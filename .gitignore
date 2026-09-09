@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+debug_output/live_frame.png
+debug_output/overlay_render.png
+debug_sessions/
