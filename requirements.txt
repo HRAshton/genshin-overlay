@@ -1,0 +1,5 @@
+numpy>=2.0
+opencv-python>=4.10
+dxcam>=0.3
+Pillow>=10
+PySide6>=6.8
