@@ -63,7 +63,8 @@ class DigitRecognizer:
             return CooldownReading(CooldownState.UNKNOWN, None, 0.0)
 
         mask = white_text_mask(image)
-        count, labels, stats, _ = cv2.connectedComponentsWithStats(mask, 8)
+        # OpenCV stubs have overload resolution issues for uint8 arrays; ignore here
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(mask, 8)  # type: ignore[call-overload]
         components: list[tuple[int, int, int, int, int, np.ndarray]] = []
         for index in range(1, count):
             x, y, width, height, area = map(int, stats[index])

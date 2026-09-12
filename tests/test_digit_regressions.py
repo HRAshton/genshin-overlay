@@ -3,8 +3,10 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from typing import ClassVar, cast
 
 import cv2
+import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -14,6 +16,9 @@ from genshin_overlay.vision.digits import DigitRecognizer
 
 
 class DigitRegressionTests(unittest.TestCase):
+    # mypy: class-level test fixture
+    recognizer: ClassVar[DigitRecognizer]
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.recognizer = DigitRecognizer()
@@ -21,6 +26,7 @@ class DigitRegressionTests(unittest.TestCase):
     def read(self, name: str):
         image = cv2.imread(str(ROOT / "tests" / "fixtures" / name))
         self.assertIsNotNone(image)
+        image = cast(np.ndarray, image)
         return self.recognizer.read(image)
 
     def test_furina_keeps_leading_one(self) -> None:

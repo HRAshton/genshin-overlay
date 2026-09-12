@@ -3,17 +3,22 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from typing import ClassVar, cast
 
 import cv2
+import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from genshin_overlay import ScreenAnalyzer
-from genshin_overlay.models import CooldownState
+from genshin_overlay.models import CooldownState, PartyObservation
 
 
 class StaticAnalysisTests(unittest.TestCase):
+    # mypy: class-level test fixture
+    analyzer: ClassVar[ScreenAnalyzer]
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.analyzer = ScreenAnalyzer()
@@ -59,6 +64,8 @@ class StaticAnalysisTests(unittest.TestCase):
     def test_half_scale_cooldown_reference(self) -> None:
         path = next(ROOT.glob("*192650.png"))
         frame = cv2.imread(str(path), cv2.IMREAD_COLOR)
+        self.assertIsNotNone(frame)
+        frame = cast(np.ndarray, frame)
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
         result = self.analyzer.analyze(frame)
         self.assertEqual((560, 0, 1440, 720), (
@@ -67,9 +74,13 @@ class StaticAnalysisTests(unittest.TestCase):
             result.viewport.width,
             result.viewport.height,
         ))
-        self.assertEqual(2, result.party.active_slot)
-        self.assertAlmostEqual(2.5, result.e.seconds)
-        self.assertAlmostEqual(8.7, result.q.seconds)
+        self.assertIsNotNone(result.party)
+        party = cast(PartyObservation, result.party)
+        self.assertEqual(2, party.active_slot)
+        self.assertIsNotNone(result.e.seconds)
+        self.assertIsNotNone(result.q.seconds)
+        self.assertAlmostEqual(2.5, cast(float, result.e.seconds))
+        self.assertAlmostEqual(8.7, cast(float, result.q.seconds))
 
 
 if __name__ == "__main__":

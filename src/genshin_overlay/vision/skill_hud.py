@@ -44,7 +44,8 @@ def locate_skill_hud(frame: np.ndarray, viewport: Rect) -> SkillHud | None:
     crop = search.crop(frame)
     hsv = cv2.cvtColor(crop, cv2.COLOR_BGR2HSV)
     mask = ((hsv[:, :, 1] < 80) & (hsv[:, :, 2] > 175)).astype(np.uint8) * 255
-    count, _, stats, _ = cv2.connectedComponentsWithStats(mask, 8)
+    # OpenCV stubs cause overload-resolution issues for uint8 arrays; ignore here
+    count, _, stats, _ = cv2.connectedComponentsWithStats(mask, 8)  # type: ignore[call-overload]
 
     expected_w = Q_KEY_WIDTH * scale_guess
     expected_h = Q_KEY_HEIGHT * scale_guess

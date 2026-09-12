@@ -23,3 +23,14 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 genshin_overlay = ["assets/digits/*.png"]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.0",
+]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src", "tests"]
+ignore_missing_imports = true
+show_error_codes = true
