@@ -6,6 +6,14 @@ and keeps observed cooldowns alive after character switches.
 
 ## Install and run
 
+Option A - pipx (recommended):
+
+```powershell
+pipx run genshin-overlay
+```
+
+Option B - from source:
+
 ```powershell
 python -m pip install -r requirements.txt
 python main.py --debug
