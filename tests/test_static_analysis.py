@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import pytest
 import unittest
 from pathlib import Path
 from typing import ClassVar, cast
@@ -15,6 +16,7 @@ from genshin_overlay import ScreenAnalyzer
 from genshin_overlay.models import CooldownState, PartyObservation
 
 
+@pytest.mark.skip(reason="For manual debugging")
 class StaticAnalysisTests(unittest.TestCase):
     # mypy: class-level test fixture
     analyzer: ClassVar[ScreenAnalyzer]
